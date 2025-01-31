@@ -145,6 +145,8 @@ public void OnPluginStart() {
 	g_fwdToss = CreateGlobalForward("TF2_OnTossBuilding", ET_Event, Param_Cell, Param_Cell, Param_Cell);
 	g_fwdTossPost = CreateGlobalForward("TF2_OnTossBuildingPost", ET_Ignore, Param_Cell, Param_Cell, Param_Cell, Param_Cell);
 	g_fwdLanded = CreateGlobalForward("TF2_OnBuildingLanded", ET_Ignore, Param_Cell, Param_Cell);
+
+	LoadTranslations("tossbuildings.phrases");
 }
 public void LockConVar(ConVar convar, const char[] oldValue, const char[] newValue) {
 	if (!StrEqual(newValue, PLUGIN_VERSION)) convar.SetString(PLUGIN_VERSION);
@@ -245,7 +247,7 @@ public void OnPlayerCarryObject(Event event, const char[] name, bool dontBroadca
 			//visually destory the building, the check timer will clean up the phys prop later
 			BreakBuilding(building);
 		} else {
-			HudNotify(owner, _, "Press [RELOAD] to toss the building");
+			HudNotify(owner, _, "%t", "HUD_Tutorial");
 		}
 	}
 }
@@ -271,7 +273,7 @@ void NotifyTossable(int userId) {
 	if (!client) return;
 	int type = GetHeldObjectType(client);
 	if (type != BUILDING_INVALID_OBJECT && IsPlayerAllowedToThrow(client, type)) {
-		HudNotify(client, _, "Press [RELOAD] to toss the building");
+		HudNotify(client, _, "%t", "HUD_Tutorial");
 	}
 }
 
@@ -754,8 +756,9 @@ void Beep(int client) {
 }
 
 void HudNotify(int client, int color=-1, const char[] format, any ...) {
+	SetGlobalTransTarget(client);
 	char buffer[128];
-	VFormat(buffer, sizeof(buffer), format, 3);
+	VFormat(buffer, sizeof(buffer), format, 4);
 #if defined _inc_tf2hudmsg
 	if (g_bDepHudMsg)
 //		TF2_HudNotificationCustom(client, "obj_status_icon_wrench", TFTeam_Red, _, "%s", buffer);

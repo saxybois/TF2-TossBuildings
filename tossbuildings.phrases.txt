@@ -1,0 +1,8 @@
+"Phrases"
+{
+	"HUD_Tutorial"
+	{
+		"en"	"Press [RELOAD] to toss the building"
+		"ru"	"Нажми [ПЕРЕЗАРЯДКА] для броска постройки"
+	}
+}
